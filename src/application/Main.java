@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         Locale.setDefault(Locale.US);
-        ArrayList<Tasklist> tasklist = new ArrayList<Tasklist>();
+        ArrayList<Tasklist> tasklist = new ArrayList<>();
 
         boolean exit = false;
 
@@ -56,27 +56,25 @@ public class Main {
         System.out.print("\nEnter a task to be added: ");
         String task = sc.nextLine();
 
-        int index = 0;
+        int i = 0;
 
-        for (Tasklist tsk : tasklistArrayList) {
-            index++;
-        }
+        for (;i < tasklistArrayList.size(); i++) {}
 
-        tasklistArrayList.add(new Tasklist(task, index));
-
-        System.out.println("\nTask added succesfully.");
+        tasklistArrayList.add(new Tasklist(task, i));
+        System.out.println("\nTask added successfully.");
         return tasklistArrayList;
     }
 
     public static ArrayList<Tasklist> removeTask(ArrayList<Tasklist> tasklistArrayList) {
         System.out.println("\nEnter the task index to be removed: ");
-        int taskIndex = 0;
+        int taskIndex;
 
         if (!tasklistArrayList.isEmpty()) {
             try {
                 taskIndex = Integer.parseInt(sc.nextLine());
             } catch (NumberFormatException e) {
                 System.err.println("An error has occurred: " + e);
+                return tasklistArrayList;
             }
 
             try {
@@ -87,15 +85,13 @@ public class Main {
             }
 
             System.out.println("Task removed successfully.");
-            return tasklistArrayList;
         } else {
             System.out.println("\nThere are no tasks.");
-            return tasklistArrayList;
         }
+        return tasklistArrayList;
     }
 
     public static void showTasks(ArrayList<Tasklist> tasklistArrayList) {
-        int i = 0;
         System.out.println();
 
         if (tasklistArrayList.isEmpty()) {
