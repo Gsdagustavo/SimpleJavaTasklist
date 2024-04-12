@@ -1,105 +1,88 @@
 package application;
 
-import util.Tasklist;
-
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
-
-    public static Scanner sc = new Scanner(System.in);
+    private static final Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Locale.setDefault(Locale.US);
-        ArrayList<Tasklist> tasklist = new ArrayList<>();
-
-        boolean exit = false;
+        ArrayList<String> taskList = new ArrayList<>();
 
         System.out.println("========== TASKLIST ==========");
 
-        while (!exit) {
-            System.out.print("\n[1] Add new task\n[2] Remove a task\n[3] Show tasks\n[0] Exit\n--> ");
-            int esc = 0;
+        while (true) {
+            printMenu();
+            int choice = getUserChoice();
 
-            try {
-                esc = Integer.parseInt(sc.nextLine());
-            } catch (NumberFormatException e) {
-                System.err.println("An error has occurred: " + e);
-            }
-
-            switch (esc) {
+            switch (choice) {
                 case 1:
-                    addNewTask(tasklist);
+                    addNewTask(taskList);
                     break;
-
                 case 2:
-                    removeTask(tasklist);
+                    removeTask(taskList);
                     break;
-
                 case 3:
-                    showTasks(tasklist);
+                    showTasks(taskList);
                     break;
-
                 case 0:
-                    exit = true;
-                    break;
+                    System.out.println("\nThanks for using my program!");
+                    return;
                 default:
                     System.err.println("\nInvalid option.");
             }
         }
-
-        System.out.println("\nThanks for using my program!");
     }
 
-    public static ArrayList<Tasklist> addNewTask(ArrayList<Tasklist> tasklistArrayList) {
+    private static void printMenu() {
+        System.out.print("\n[1] Add new task\n[2] Remove a task\n[3] Show tasks\n[0] Exit\n--> ");
+    }
+
+    private static int getUserChoice() {
+        while (true) {
+            try {
+                return sc.nextInt();
+            } catch (InputMismatchException e) {
+                System.err.println("Invalid input. Please enter a number.");
+                sc.nextLine(); // Consume the invalid input
+            }
+        }
+    }
+
+    private static void addNewTask(ArrayList<String> taskList) {
         System.out.print("\nEnter a task to be added: ");
+        sc.nextLine(); // Consume newline character
         String task = sc.nextLine();
-
-        int i = 0;
-
-        for (;i < tasklistArrayList.size(); i++) {}
-
-        tasklistArrayList.add(new Tasklist(task, i));
+        taskList.add(task);
         System.out.println("\nTask added successfully.");
-        return tasklistArrayList;
     }
 
-    public static ArrayList<Tasklist> removeTask(ArrayList<Tasklist> tasklistArrayList) {
-        System.out.println("\nEnter the task index to be removed: ");
-        int taskIndex;
+    private static void removeTask(ArrayList<String> taskList) {
 
-        if (!tasklistArrayList.isEmpty()) {
-            try {
-                taskIndex = Integer.parseInt(sc.nextLine());
-            } catch (NumberFormatException e) {
-                System.err.println("An error has occurred: " + e);
-                return tasklistArrayList;
+        if (!taskList.isEmpty()) {
+            System.out.print("\nEnter the task index to be removed: ");
+            int taskIndex = sc.nextInt();
+
+            if (taskIndex >= 1 && taskIndex <= taskList.size()) {
+                taskList.remove(taskIndex - 1);
+                System.out.println("Task removed successfully.");
+            } else {
+            System.err.println("Invalid index.\n");
             }
-
-            try {
-                tasklistArrayList.remove(taskIndex);
-            } catch (IndexOutOfBoundsException e) {
-                System.err.println("\nInvalid index.");
-                return tasklistArrayList;
-            }
-
-            System.out.println("Task removed successfully.");
         } else {
             System.out.println("\nThere are no tasks.");
         }
-        return tasklistArrayList;
     }
 
-    public static void showTasks(ArrayList<Tasklist> tasklistArrayList) {
-        System.out.println();
-
-        if (tasklistArrayList.isEmpty()) {
-            System.out.println("There are no tasks.");
-        } else {
-            for (Tasklist task : tasklistArrayList) {
-                System.out.println(task);
+    private static void showTasks(ArrayList<String> taskList) {
+        if (!taskList.isEmpty()) {
+            System.out.println("\nTasks:");
+            for (int i = 0; i < taskList.size(); i++) {
+                System.out.println((i + 1) + ". " + taskList.get(i));
             }
+        } else {
+            System.out.println("\nThere are no tasks.");
         }
     }
 }
